@@ -3,17 +3,17 @@
 # Recipe:: default
 #
 # Copyright:: 2018, The Authors, All Rights Reserved.
-package 'apache' do
-	package_name 'httpd'
+if node['platform_family'] == 'rhel'
+	package = "httpd"
+elseif node['platform_family'] == 'debian'
+	package = "apache2"
+end
+package 'webserver' do
+	package_name package
 	action 'install'
 end
 
 service	'httpd' do
 	service_name 'httpd'
 	action [:start, :enable]
-end
-
-file 'default www' do
-	path '/var/www/html/index.html'
-	content 'Hello World'
 end
